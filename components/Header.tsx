@@ -7,6 +7,7 @@ import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Link from '@/components/Link'
+import Container from '@mui/material/Container'
 // import type { User } from '@supabase/supabase-js'
 
 export default function Header() {
@@ -33,31 +34,33 @@ export default function Header() {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <Link href="/" sx={{ color: 'white', textDecoration: 'none' }}>
-            My App
-          </Link>
-        </Typography>
-        {session ? (
-          <div>
-            <Button color="inherit" onClick={handleMenuOpen}>
-              {session.user.email}
+      <Container disableGutters maxWidth="lg">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            <Link href="/" color="inherit" sx={{ textDecoration: 'none' }}>
+              My App
+            </Link>
+          </Typography>
+          {session ? (
+            <div>
+              <Button color="inherit" onClick={handleMenuOpen}>
+                {session.user.email}
+              </Button>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+              </Menu>
+            </div>
+          ) : (
+            <Button color="inherit" component={Link} href="/login">
+              Login
             </Button>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
-            </Menu>
-          </div>
-        ) : (
-          <Button color="inherit" component={Link} href="/login">
-            Login
-          </Button>
-        )}
-      </Toolbar>
+          )}
+        </Toolbar>
+      </Container>
     </AppBar>
   )
 }

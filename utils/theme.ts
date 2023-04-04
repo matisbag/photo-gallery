@@ -25,6 +25,25 @@ const theme = createTheme({
   typography: {
     fontFamily: roboto.style.fontFamily,
   },
+  spacing: 8,
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          ...(!ownerState.disableGutters && {
+            [theme.breakpoints.down('md')]: {
+              paddingTop: theme.spacing(2),
+              paddingBottom: theme.spacing(2),
+            },
+            [theme.breakpoints.up('md')]: {
+              paddingTop: theme.spacing(4),
+              paddingBottom: theme.spacing(4),
+            },
+          }),
+        }),
+      },
+    },
+  },
 })
 
 export default theme
