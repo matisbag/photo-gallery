@@ -20,7 +20,7 @@ export default function Home() {
           sx={{
             color: 'text.primary',
             fontWeight: 'bold',
-            mb: 4,
+            my: 4,
           }}
         >
           My Google Photos
@@ -49,6 +49,7 @@ export default function Home() {
           href="/signup"
           variant="contained"
           color="primary"
+          disableElevation
           sx={{
             mx: 2,
           }}
