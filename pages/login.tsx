@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { Container, CssBaseline, TextField, Typography } from '@mui/material'
+import { Container, TextField, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
 export default function Login() {
@@ -28,7 +28,6 @@ export default function Login() {
 
   return (
     <>
-      <CssBaseline />
       <Container maxWidth="sm">
         <Typography variant="h4" align="center" sx={{ mt: 4 }}>
           Login

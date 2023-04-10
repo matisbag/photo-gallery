@@ -49,7 +49,7 @@ export default function Home() {
         {session ? (
           <Button
             LinkComponent={Link}
-            href="/gallery"
+            href="/photos"
             variant="contained"
             color="primary"
             disableElevation
