@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -35,12 +34,10 @@ export default function Header() {
   return (
     <AppBar position="static">
       <Container disableGutters maxWidth="lg">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            <Link href="/" color="inherit" sx={{ textDecoration: 'none' }}>
-              My App
-            </Link>
-          </Typography>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Link href="/" color="inherit" sx={{ textDecoration: 'none' }}>
+            <img src="/logo.png" alt="" height="50px" />
+          </Link>
           {session ? (
             <div>
               <Button color="inherit" onClick={handleMenuOpen}>

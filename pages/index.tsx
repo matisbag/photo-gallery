@@ -1,9 +1,11 @@
+import { useSession } from '@supabase/auth-helpers-react'
 import { Box, Button, Container, Typography } from '@mui/material'
 // import Image from 'next/image'
 import Link from '@/components/Link'
 // import LogoImage from '@/public/logo.png'
 
 export default function Home() {
+  const session = useSession()
   return (
     <Container maxWidth="lg">
       <Box
@@ -23,7 +25,7 @@ export default function Home() {
             my: 4,
           }}
         >
-          My Google Photos
+          My Photo Gallery
         </Typography>
       </Box>
       <Typography
@@ -44,29 +46,46 @@ export default function Home() {
           alignItems: 'center',
         }}
       >
-        <Button
-          LinkComponent={Link}
-          href="/signup"
-          variant="contained"
-          color="primary"
-          disableElevation
-          sx={{
-            mx: 2,
-          }}
-        >
-          Sign Up
-        </Button>
-        <Button
-          LinkComponent={Link}
-          href="/login"
-          variant="outlined"
-          color="primary"
-          sx={{
-            mx: 2,
-          }}
-        >
-          Log In
-        </Button>
+        {session ? (
+          <Button
+            LinkComponent={Link}
+            href="/gallery"
+            variant="contained"
+            color="primary"
+            disableElevation
+            sx={{
+              mx: 2,
+            }}
+          >
+            Go to Gallery
+          </Button>
+        ) : (
+          <>
+            <Button
+              LinkComponent={Link}
+              href="/signup"
+              variant="contained"
+              color="primary"
+              disableElevation
+              sx={{
+                mx: 2,
+              }}
+            >
+              Sign Up
+            </Button>
+            <Button
+              LinkComponent={Link}
+              href="/login"
+              variant="outlined"
+              color="primary"
+              sx={{
+                mx: 2,
+              }}
+            >
+              Log In
+            </Button>
+          </>
+        )}
       </Box>
     </Container>
   )
