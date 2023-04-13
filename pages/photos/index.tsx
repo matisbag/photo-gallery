@@ -1,4 +1,10 @@
-import { Container, ImageList, ImageListItem } from '@mui/material'
+import {
+  Container,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+} from '@mui/material'
+import { parseISO, format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 
@@ -6,6 +12,7 @@ interface ImageData {
   id: string
   name: string
   url?: string
+  created_at: string
 }
 
 export default function Photos() {
@@ -47,7 +54,7 @@ export default function Photos() {
 
   return (
     <Container maxWidth="lg">
-      <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+      <ImageList cols={3}>
         {images.map((image) => (
           <ImageListItem key={image.id}>
             {image.name}
@@ -56,6 +63,16 @@ export default function Photos() {
               srcSet={image.url}
               alt={image.name}
               loading="lazy"
+            />
+            <ImageListItemBar
+              title={image.name}
+              subtitle={
+                <span>
+                  Upload date :{' '}
+                  {format(parseISO(image.created_at), 'MM-dd-yyyy')}
+                </span>
+              }
+              position="below"
             />
           </ImageListItem>
         ))}
