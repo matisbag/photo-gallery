@@ -3,6 +3,7 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
+  Checkbox,
 } from '@mui/material'
 import { parseISO, format } from 'date-fns'
 import { useEffect, useState } from 'react'
@@ -22,57 +23,51 @@ export default function Photos() {
   const [images, setImages] = useState<ImageData[]>([])
 
   async function fetchImages() {
-    const { data, error } = await storage.list(
-      'f5e47da3-ea21-4722-9dec-261d0280c114',
-      {
+    if (user) {
+      const { data, error } = await storage.list(user.id, {
         limit: 100,
+      })
+      if (error) {
+        console.log(error)
+      } else {
+        // console.log(data)
+        const imagesWithUrl = await Promise.all(
+          data.map((image) => {
+            const url = storage.getPublicUrl(user.id + '/' + image.name).data
+              ?.publicUrl
+            return { ...image, url }
+          })
+        )
+        console.log(imagesWithUrl)
+        setImages(imagesWithUrl)
       }
-    )
-    if (error) {
-      console.log(error)
-    } else {
-      console.log(data)
-      const imagesWithUrl = await Promise.all(
-        data.map(async (image) => {
-          const url = await storage.getPublicUrl(
-            'f5e47da3-ea21-4722-9dec-261d0280c114/' + image.name
-          ).data?.publicUrl
-          return { ...image, url }
-        })
-      )
-      console.log(imagesWithUrl)
-      setImages(imagesWithUrl)
-      console.log(user)
     }
   }
 
   useEffect(() => {
-    if (user) {
-      fetchImages()
-    }
+    fetchImages()
   }, [user])
 
   return (
     <Container maxWidth="lg">
-      <ImageList cols={3}>
+      <ImageList cols={3} gap={8}>
         {images.map((image) => (
-          <ImageListItem key={image.id}>
-            {image.name}
+          <ImageListItem key={image.id} sx={{ borderRadius: 8 }}>
             <img
               src={image.url}
               srcSet={image.url}
               alt={image.name}
-              loading="lazy"
+              style={{ borderRadius: 8 }}
             />
             <ImageListItemBar
-              title={image.name}
-              subtitle={
-                <span>
-                  Upload date :{' '}
-                  {format(parseISO(image.created_at), 'MM-dd-yyyy')}
-                </span>
-              }
-              position="below"
+              title="Product"
+              sx={{
+                borderBottomLeftRadius: 8,
+                borderBottomRightRadius: 8,
+                background:
+                  'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+              }}
+              actionIcon={<Checkbox />}
             />
           </ImageListItem>
         ))}
