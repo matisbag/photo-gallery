@@ -1,8 +1,6 @@
 import { useSession } from '@supabase/auth-helpers-react'
 import { Box, Button, Container, Typography } from '@mui/material'
-// import Image from 'next/image'
 import Link from '@/components/Link'
-// import LogoImage from '@/public/logo.png'
 
 export default function Home() {
   const session = useSession()
