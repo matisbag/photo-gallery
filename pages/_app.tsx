@@ -8,7 +8,7 @@ import theme from '@/utils/muiTheme'
 import createEmotionCache from '@/utils/createEmotionCache'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
-import Layout from '@/components/Layout'
+import Layout from '@/components/pages/Layout'
 import '@/styles/global.css'
 
 // Client-side cache, shared for the whole session of the user in the browser.
