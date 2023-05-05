@@ -49,11 +49,7 @@ export default function Home() {
             LinkComponent={Link}
             href="/photos"
             variant="contained"
-            color="primary"
             disableElevation
-            sx={{
-              mx: 2,
-            }}
           >
             Go to Gallery
           </Button>
@@ -63,10 +59,9 @@ export default function Home() {
               LinkComponent={Link}
               href="/signup"
               variant="contained"
-              color="primary"
               disableElevation
               sx={{
-                mx: 2,
+                mx: 1,
               }}
             >
               Sign Up
@@ -75,9 +70,8 @@ export default function Home() {
               LinkComponent={Link}
               href="/login"
               variant="outlined"
-              color="primary"
               sx={{
-                mx: 2,
+                mx: 1,
               }}
             >
               Log In

@@ -4,11 +4,12 @@ import { AppProps } from 'next/app'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache } from '@emotion/react'
-import theme from '../utils/muiTheme'
-import createEmotionCache from '../utils/createEmotionCache'
+import theme from '@/utils/muiTheme'
+import createEmotionCache from '@/utils/createEmotionCache'
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { SessionContextProvider, Session } from '@supabase/auth-helpers-react'
-import Layout from '../components/Layout'
+import Layout from '@/components/Layout'
+import '@/styles/global.css'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
