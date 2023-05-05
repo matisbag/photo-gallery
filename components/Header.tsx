@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useRouter } from 'next/router'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Button from '@mui/material/Button'
@@ -10,6 +11,7 @@ import Container from '@mui/material/Container'
 // import type { User } from '@supabase/supabase-js'
 
 export default function Header() {
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const supabase = useSupabaseClient()
   const session = useSession()
@@ -28,6 +30,7 @@ export default function Header() {
 
   function handleSignOut() {
     signOut()
+    router.push('/')
     handleMenuClose()
   }
 

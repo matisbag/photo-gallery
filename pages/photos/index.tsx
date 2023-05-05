@@ -5,7 +5,6 @@ import {
   ImageListItemBar,
   Checkbox,
 } from '@mui/material'
-import { parseISO, format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 
@@ -32,7 +31,7 @@ export default function Photos() {
   async function fetchImages() {
     if (user) {
       const { data, error } = await storage.list(user.id, {
-        limit: 10,
+        limit: 9,
       })
       if (error) {
         alert(error.message)

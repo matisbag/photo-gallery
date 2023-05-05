@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import { Container, TextField, Typography, Box } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import Link from '@/components/Link'
@@ -10,6 +10,7 @@ interface AuthFormProps {
 }
 
 export default function AuthForm({ type }: AuthFormProps) {
+  const user = useUser()
   const supabase = useSupabaseClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,6 +31,12 @@ export default function AuthForm({ type }: AuthFormProps) {
     }
     setLoading(false)
   }
+
+  useEffect(() => {
+    if (user) {
+      router.replace('/')
+    }
+  }, [user])
 
   return (
     <Container maxWidth="sm">
