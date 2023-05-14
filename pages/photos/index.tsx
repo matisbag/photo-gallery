@@ -1,19 +1,18 @@
-import { Container, LinearProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
-import UploadFiles from '@/components/UploadFiles'
-import GalleryContainer from '@/components/GalleryContainer'
+import { Box, Container, LinearProgress } from '@mui/material'
 import { Image } from '@/types/image'
+import BtnUploadFiles from '@/components/BtnUploadFiles'
+import GalleryContainer from '@/components/GalleryContainer'
+import BtnDeleteFiles from '@/components/BtnDeleteFiles'
 
 export default function Photos() {
   const supabase = useSupabaseClient()
   const user = useUser()
-  const storage = supabase.storage.from(
-    process.env.NEXT_PUBLIC_BUCKET_NAME as string
-  )
+  const storage = supabase.storage.from(process.env.NEXT_PUBLIC_BUCKET_NAME as string)
   const [loading, setLoading] = useState(false)
   const [images, setImages] = useState<Image[]>([])
-  const [selectedImageIds, setSelectedImageIds] = useState<Image['id'][]>([])
+  const [selectedImageNames, setSelectedImageNames] = useState<Image['name'][]>([])
 
   async function fetchImages() {
     if (user) {
@@ -39,14 +38,22 @@ export default function Photos() {
     <Container maxWidth="lg">
       {user ? (
         <>
-          <UploadFiles user={user} reloadImages={() => fetchImages()} />
-          <LinearProgress
-            sx={{ visibility: loading ? 'visible' : 'hidden', marginTop: 2 }}
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <BtnUploadFiles user={user} reloadImages={() => fetchImages()} />
+            <BtnDeleteFiles
+              ImagePathNames={selectedImageNames}
+              success={() => {
+                setSelectedImageNames([])
+                fetchImages()
+              }}
+            />
+          </Box>
+          <LinearProgress sx={{ visibility: loading ? 'visible' : 'hidden', mt: 2 }} />
           <GalleryContainer
+            user={user}
             images={images}
-            selectedImageIds={selectedImageIds}
-            setSelectedImageIds={(imageIds) => setSelectedImageIds(imageIds)}
+            selectedImageNames={selectedImageNames}
+            setSelectedImageNames={(imageIds) => setSelectedImageNames(imageIds)}
           />
         </>
       ) : null}

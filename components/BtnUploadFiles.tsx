@@ -3,14 +3,14 @@ import { LoadingButton } from '@mui/lab'
 import { User } from '@supabase/supabase-js'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
-interface UploadFilesProps {
+interface BtnUploadFilesProps {
   user: User
   reloadImages: () => void
 }
 
 const bucketName = process.env.NEXT_PUBLIC_BUCKET_NAME as string
 
-export default function UploadFiles({ user, reloadImages }: UploadFilesProps) {
+export default function BtnUploadFiles({ user, reloadImages }: BtnUploadFilesProps) {
   const supabase = useSupabaseClient()
   const [loading, setLoading] = useState(false)
   const storage = supabase.storage.from(bucketName)
@@ -46,6 +46,7 @@ export default function UploadFiles({ user, reloadImages }: UploadFilesProps) {
         type="file"
         hidden
         accept="image/png, image/jpeg"
+        multiple
         onChange={(e) => uploadImages(e.target.files)}
         ref={inputFileRef}
       />

@@ -75,7 +75,7 @@ export default function AuthForm({ type }: AuthFormProps) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: 1,
+            mt: 1,
           }}
         >
           Or&nbsp;

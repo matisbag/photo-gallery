@@ -1,11 +1,8 @@
-import {
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-  Checkbox,
-} from '@mui/material'
-import { useUser } from '@supabase/auth-helpers-react'
+import { useMemo, useState } from 'react'
+import { User } from '@supabase/supabase-js'
 import { Image } from '@/types/image'
+import { ImageList, ImageListItem, ImageListItemBar, Checkbox } from '@mui/material'
+import Photo from '@/components/Photo'
 
 const env = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -15,78 +12,107 @@ const env = {
 const CDNURL = `${env.supabaseUrl}/storage/v1/object/public/${env.bucketName}/`
 
 interface GalleryContainerProps {
+  user: User
   images: Image[]
-  selectedImageIds: Image['id'][]
-  setSelectedImageIds: (imageIds: Image['id'][]) => void
+  selectedImageNames: Image['id'][]
+  setSelectedImageNames: (imageIds: Image['id'][]) => void
 }
 
 export default function GalleryContainer({
+  user,
   images,
-  selectedImageIds,
-  setSelectedImageIds,
+  selectedImageNames,
+  setSelectedImageNames,
 }: GalleryContainerProps) {
-  const user = useUser()
+  const [imageName, setImageName] = useState<Image['name'] | null>(null)
 
-  function handleImageSelect(imageId: string) {
-    if (selectedImageIds.includes(imageId)) {
-      setSelectedImageIds(selectedImageIds.filter((id) => id !== imageId))
+  const getImagePath = useMemo(() => {
+    return (imageName: Image['name']) => `${user.id}/${imageName}`
+  }, [user.id])
+
+  function handleImageClick(imageName: Image['name']) {
+    // open photo dialog + change url
+    const newUrl = `/photos/${imageName}`
+    window.history.pushState(null, '', newUrl)
+    setImageName(imageName)
+  }
+
+  function handleImageSelect(
+    imageName: Image['id'],
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+    e.stopPropagation()
+    if (selectedImageNames.includes(imageName)) {
+      setSelectedImageNames(selectedImageNames.filter((name) => name !== imageName))
     } else {
-      setSelectedImageIds([...selectedImageIds, imageId])
+      setSelectedImageNames([...selectedImageNames, imageName])
     }
   }
 
   return (
-    <ImageList
-      sx={{
-        gridTemplateColumns: 'repeat(auto-fill, minmax(285px, 1fr))!important',
-      }}
-      gap={8}
-    >
-      {images.map((image) => (
-        <ImageListItem
-          key={image.id}
-          sx={{
-            borderRadius: 8,
-            '&:hover .MuiImageListItemBar-root': { opacity: 1 },
-          }}
-        >
-          <img
-            src={CDNURL + user?.id + '/' + image.name}
-            alt={image.name}
-            style={{ borderRadius: 8 }}
-            loading="lazy"
-          />
-          <ImageListItemBar
+    <>
+      {imageName && (
+        <Photo
+          cdnUrl={CDNURL}
+          user={user}
+          imageName={imageName}
+          closeDialog={() => setImageName(null)}
+        />
+      )}
+      <ImageList
+        sx={{
+          gridTemplateColumns: 'repeat(auto-fill, minmax(285px, 1fr))!important',
+        }}
+        gap={8}
+      >
+        {images.map((image) => (
+          <ImageListItem
+            key={image.id}
             sx={{
-              opacity: 0,
-              transition: 'opacity 0.2s ease-in-out',
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              height: 70,
-              background:
-                'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0) 80%)',
+              borderRadius: 8,
+              '&:hover .MuiImageListItemBar-root': { opacity: 1 },
+              cursor: 'pointer',
             }}
-            position="top"
-          />
-          <ImageListItemBar
-            sx={{
-              opacity: selectedImageIds.includes(image.id) ? 1 : 0,
-              transition: 'opacity 0.2s ease-in-out',
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              background: 'transparent',
-            }}
-            position="top"
-            actionIcon={
-              <Checkbox
-                sx={{ color: 'white' }}
-                checked={selectedImageIds.includes(image.id)}
-                onChange={() => handleImageSelect(image.id)}
-              />
-            }
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+            onClick={() => handleImageClick(image.name)}
+          >
+            <img
+              src={CDNURL + getImagePath(image.name)}
+              alt={image.name}
+              style={{ borderRadius: 8 }}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              sx={{
+                opacity: 0,
+                transition: 'opacity 0.2s ease-in-out',
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                height: 70,
+                background:
+                  'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 80%)',
+              }}
+              position="top"
+            />
+            <ImageListItemBar
+              sx={{
+                opacity: selectedImageNames.includes(getImagePath(image.name)) ? 1 : 0,
+                transition: 'opacity 0.2s ease-in-out',
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                background: 'transparent',
+              }}
+              position="top"
+              actionIcon={
+                <Checkbox
+                  sx={{ color: 'white' }}
+                  checked={selectedImageNames.includes(getImagePath(image.name))}
+                  onClick={(e) => handleImageSelect(getImagePath(image.name), e)}
+                />
+              }
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    </>
   )
 }

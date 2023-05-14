@@ -34,8 +34,8 @@ export default function Home() {
           textAlign: 'center',
         }}
       >
-        This is a simplified version of Google Photos where you can store and
-        organize your photos in the cloud.
+        This is a simplified version of Google Photos where you can store and organize
+        your photos in the cloud.
       </Typography>
       <Box
         sx={{
