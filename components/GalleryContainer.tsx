@@ -16,6 +16,7 @@ interface GalleryContainerProps {
   images: Image[]
   selectedImageNames: Image['id'][]
   setSelectedImageNames: (imageIds: Image['id'][]) => void
+  fetchImages: () => void
 }
 
 export default function GalleryContainer({
@@ -23,6 +24,7 @@ export default function GalleryContainer({
   images,
   selectedImageNames,
   setSelectedImageNames,
+  fetchImages,
 }: GalleryContainerProps) {
   const [imageName, setImageName] = useState<Image['name'] | null>(null)
 
@@ -56,7 +58,10 @@ export default function GalleryContainer({
           cdnUrl={CDNURL}
           user={user}
           imageName={imageName}
-          closeDialog={() => setImageName(null)}
+          closeDialog={() => {
+            setImageName(null)
+            fetchImages()
+          }}
         />
       )}
       <ImageList

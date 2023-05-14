@@ -46,7 +46,10 @@ export default function Photos() {
                 setSelectedImageNames([])
                 fetchImages()
               }}
-            />
+              variant="contained"
+            >
+              Delete {!!selectedImageNames.length && `(${selectedImageNames.length})`}
+            </BtnDeleteFiles>
           </Box>
           <LinearProgress sx={{ visibility: loading ? 'visible' : 'hidden', mt: 2 }} />
           <GalleryContainer
@@ -54,6 +57,7 @@ export default function Photos() {
             images={images}
             selectedImageNames={selectedImageNames}
             setSelectedImageNames={(imageIds) => setSelectedImageNames(imageIds)}
+            fetchImages={() => fetchImages()}
           />
         </>
       ) : null}
