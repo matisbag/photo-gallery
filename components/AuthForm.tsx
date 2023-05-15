@@ -27,7 +27,12 @@ export default function AuthForm({ type }: AuthFormProps) {
     if (error) {
       alert(error.message)
     } else {
-      type === 'login' ? router.push('/') : router.push('/login')
+      if (type === 'login') {
+        router.push('/')
+      } else {
+        alert('check your emails to confirm registration')
+        router.push('/login')
+      }
     }
     setLoading(false)
   }
