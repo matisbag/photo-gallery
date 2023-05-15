@@ -2,11 +2,12 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/auth-helpers-react'
 import { Image } from '@/types/image'
-import { Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
+import { Box, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material'
 import BtnDeleteFiles from '@/components/BtnDeleteFiles'
-import { LoadingButton } from '@mui/lab'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import DeleteIcon from '@mui/icons-material/DeleteOutline'
+import FileDownloadIcon from '@mui/icons-material/FileDownload'
+
 interface PhotoProps {
   cdnUrl: string
   user: User
@@ -28,6 +29,23 @@ export default function Photo({ cdnUrl, user, imageName, closeDialog }: PhotoPro
       closeDialog()
     } else {
       router.push('/photos')
+    }
+  }
+
+  const handleDownloadClick = async () => {
+    try {
+      const response = await fetch(cdnUrl + user.id + '/' + imageName)
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+
+      const link = document.createElement('a')
+      link.href = url
+      link.download = imageName
+      link.click()
+
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      alert("Erreur lors du téléchargement de l'image")
     }
   }
 
@@ -53,8 +71,14 @@ export default function Photo({ cdnUrl, user, imageName, closeDialog }: PhotoPro
       {!image ? null : (
         <>
           <DialogActions sx={{ justifyContent: 'space-between' }}>
-            <IconButton onClick={handleClose}>
-              <ArrowBackIcon />
+            <Box sx={{ flexGrow: 1 }}>
+              <IconButton onClick={handleClose}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Box>
+
+            <IconButton disabled={loading} title="Download" onClick={handleDownloadClick}>
+              <FileDownloadIcon />
             </IconButton>
             <BtnDeleteFiles
               title="Delete"
