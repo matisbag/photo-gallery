@@ -17,9 +17,8 @@ export default function Photos() {
   async function fetchImages() {
     if (user) {
       setLoading(true)
-      const { data, error } = await storage.list(user.id, {
-        limit: 9,
-      })
+      const { data, error } = await storage.list(user.id)
+
       if (error) {
         alert(error.message)
       } else {
