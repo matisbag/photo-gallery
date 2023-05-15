@@ -1,8 +1,15 @@
 import { useMemo, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 import { Image } from '@/types/image'
-import { ImageList, ImageListItem, ImageListItemBar, Checkbox } from '@mui/material'
+import {
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Checkbox,
+  useMediaQuery,
+} from '@mui/material'
 import Photo from '@/components/Photo'
+import theme from '@/utils/muiTheme'
 
 const env = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -27,6 +34,10 @@ export default function GalleryContainer({
   fetchImages,
 }: GalleryContainerProps) {
   const [imageName, setImageName] = useState<Image['name'] | null>(null)
+
+  const isSmScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMdScreen = useMediaQuery(theme.breakpoints.down('md'))
+  const cols = isSmScreen ? 1 : isMdScreen ? 2 : 3
 
   const getImagePath = useMemo(() => {
     return (imageName: Image['name']) => `${user.id}/${imageName}`
@@ -64,17 +75,11 @@ export default function GalleryContainer({
           }}
         />
       )}
-      <ImageList
-        sx={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(285px, 1fr))!important',
-        }}
-        gap={8}
-      >
+      <ImageList variant="masonry" cols={cols} gap={8}>
         {images.map((image) => (
           <ImageListItem
             key={image.id}
             sx={{
-              borderRadius: 8,
               '&:hover .MuiImageListItemBar-root': { opacity: 1 },
               cursor: 'pointer',
             }}
@@ -83,7 +88,7 @@ export default function GalleryContainer({
             <img
               src={CDNURL + getImagePath(image.name)}
               alt={image.name}
-              style={{ borderRadius: 8 }}
+              style={{ borderRadius: 8, maxHeight: 700 }}
               loading="lazy"
             />
             <ImageListItemBar

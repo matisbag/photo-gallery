@@ -92,7 +92,10 @@ export default function Photo({ cdnUrl, user, imageName, closeDialog }: PhotoPro
           <DialogContent
             sx={{ p: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
-            <img src={image} style={{ maxWidth: '100%' }} />
+            <img
+              src={image}
+              style={{ maxWidth: '100%', maxHeight: 'calc(100% - 4px)' }}
+            />
           </DialogContent>
         </>
       )}
