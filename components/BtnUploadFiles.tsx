@@ -17,7 +17,6 @@ export default function BtnUploadFiles({ user, reloadImages }: BtnUploadFilesPro
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   async function uploadImages(files: FileList | null) {
-    console.log(files)
     if (files) {
       setLoading(true)
 
@@ -30,7 +29,7 @@ export default function BtnUploadFiles({ user, reloadImages }: BtnUploadFilesPro
 
       setLoading(false)
       reloadImages()
-      inputFileRef.current!.value = ''
+      inputFileRef.current!.value = '' // reset input file
     }
   }
 

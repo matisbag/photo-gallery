@@ -22,7 +22,6 @@ export default function Photos() {
       if (error) {
         alert(error.message)
       } else {
-        console.log(data)
         setImages(data)
       }
       setLoading(false)

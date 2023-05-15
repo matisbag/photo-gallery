@@ -76,7 +76,6 @@ export default function Photo({ cdnUrl, user, imageName, closeDialog }: PhotoPro
                 <ArrowBackIcon />
               </IconButton>
             </Box>
-
             <IconButton disabled={loading} title="Download" onClick={handleDownloadClick}>
               <FileDownloadIcon />
             </IconButton>
